@@ -5,39 +5,43 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
-	private final int count;
-	private final double[] fractions;
-
-	public PercolationStats(int n, int t) {
-		if (n <= 0 || t <= 0) {
-			throw new IllegalArgumentException("N <= 0 or T <= 0");
+	private int count;
+	private double[] arr;
+	/**
+	 * 
+	 * @param n : độ rộng của lưới ô
+	 * @param trials số lần thí nghiệm
+	 */
+	public PercolationStats(int n, int trials) {
+		if (n <= 0 || trials <= 0) {
+			throw new IllegalArgumentException();
 		}
-		count = t;
-		fractions = new double[count];
+		count = trials;
+		arr = new double[count];
 		for (int i = 0; i < count; i++) {
-			Percolation pr = new Percolation(n);
-			int openedSites = 0;
-			while (!pr.percolates()) {
+			Percolation percolation = new Percolation(n);
+			int open = 0;
+			while (!percolation.percolates()) {
 				int p = StdRandom.uniform(1, n + 1);
 				int q = StdRandom.uniform(1, n + 1);
-				if (!pr.isOpen(p, q)) {
-					pr.open(p, q);
-					openedSites++;
+				if (!percolation.isOpen(p, q)) {
+					percolation.open(p, q);
+					open++;
 				}
 			}
-			double fraction = (double) openedSites / (n * n);
-			fractions[i] = fraction;
+			double frac = (double) open / (n * n);
+			arr[i] = frac;
 		}
 	}
 
 	/** Giá trị trung bình của mẫu. */
 	public double mean() {
-		return StdStats.mean(fractions);
+		return StdStats.mean(arr);
 	}
 
 	/** Độ lệch chuẩn. */
 	public double stddev() {
-		return StdStats.stddev(fractions);
+		return StdStats.stddev(arr);
 	}
 
 	/** Giới hạn dưới của khoảng tin cậy 95%. */

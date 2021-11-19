@@ -2,37 +2,46 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-	private static final int TOP = 0;
-	private final boolean[][] opened;
-	private final int size;
-	private final int bottom;
+	private static int top = 0;
+	private boolean[][] opened;
+	private int size;
+	private int bottom;
 	private int openSites;
-	private final WeightedQuickUnionUF qf;
+	private WeightedQuickUnionUF qf;
 
 	
-	/** Khởi tạo giá trị */
+	/**
+	 * Khởi tạo giá trị ban đầu
+	 * @param n : 
+	 */
 	public Percolation(int n) {
 		if (n <= 0) {
 			throw new IllegalArgumentException();
 		}
 		size = n;
 		bottom = size * size + 1;
-		/**Vì có 2 phần tử ở đầu và cuối để kiểm tra có sự kiên thông chưa
-		 * nên sẽ cần thêm 2 phần tử nữa */
+		/**
+		 * khởi tạo mảng 2 chiều size*size để khởi tạo mảng ban đầu
+		 * thêm 2 phần tử đầu(top) và cuối(bottom) để kiểm tra 2 phần đó đã liên thông hay chưa
+		 */
 		qf = new WeightedQuickUnionUF(size * size + 2);
 		opened = new boolean[size][size];
 		openSites = 0;
 	}
 
 	
-	/**Mở ô từ giá trị false về true hay là tô màu */
+	/**
+	 * Mở ô từ giá trị false về true hay là tô màu 
+	 * @param row : vị trí hàng
+	 * @param col : vị trí cột
+	 */
 	public void open(int row, int col) {
 		checkException(row, col);
 		opened[row - 1][col - 1] = true;
 		openSites++;
 
 		if (row == 1) {
-			qf.union(getQuickFindIndex(row, col), TOP);
+			qf.union(getQuickFindIndex(row, col), top);
 		}
 
 		if (row == size) {
@@ -56,40 +65,64 @@ public class Percolation {
 		}
 	}
 
-	/** kiểm tra xem giá trị nhập vào có vượt ra khỏi ngoài mảng hay không */
+	/**
+	 * kiểm tra xem giá trị nhập vào có vượt ra khỏi ngoài mảng hay không
+	 * @param row : vị trí hàng
+	 * @param col : vị trí cột
+	 */
 	private void checkException(int row, int col) {
 		if (row <= 0 || row > size || col <= 0 || col > size) {
 			throw new IllegalArgumentException();
 		}
 	}
 
-	/**Kiểm tra xem ô hiện tại đã mở(tô màu) hay chưa */
+	/**
+	 * 
+	 * @param row : vị trí hàng
+	 * @param col : vị trí cột
+	 * @return : 
+	 */
 	public boolean isOpen(int row, int col) {
 		checkException(row, col);
 		return opened[row - 1][col - 1];
 	}
 
-	/**Trả về số ô đã mở (tô màu) */
+	/**
+	 * 
+	 * @return : trả về số ô đã mở
+	 */
 	public int numberOfOpenSites() {
 		return openSites;
 	}
 
-	/**Kiểm tra xem bảng đã bị đầy chưa */
+	/**
+	 * 
+	 * @param row : vị trí hàng
+	 * @param col : vị trí cột
+	 * @return : kiểm tra xem số ô vị trí (row,col) đã liên thông chưa
+	 */
 	public boolean isFull(int row, int col) {
 		if ((row > 0 && row <= size) && (col > 0 && col <= size)) {
-			return qf.find(TOP) == qf.find(getQuickFindIndex(row, col));
+			return qf.find(top) == qf.find(getQuickFindIndex(row, col));
 		} else
 			throw new IllegalArgumentException();
 	}
 
-	/**Lấy vị trí trong bảng */
+	/**
+	 * 
+	 * @param row : vị trí hàng
+	 * @param col : vị trí cột
+	 * @return trả về vị trí row và col trong bảng
+	 */
 	private int getQuickFindIndex(int row, int col) {
 		return size * (row - 1) + col;
 	}
 
-	/** Kiểm tra xem trên cùng và cuối cùng đã liên thông hay chưa
-	 * Nếu như liên thông rồi thì hệ thống bị thấm */
+	/**
+	 * Kiểm tra xem 2 phần tử top và bottom đã liên thông hay chưa
+	 * @return nếu 2 phần tử đã liên thông trả về true nếu không trả về false
+	 */
 	public boolean percolates() {
-		return qf.find(TOP) == qf.find(bottom); 
+		return qf.find(top) == qf.find(bottom); 
 	}
 }

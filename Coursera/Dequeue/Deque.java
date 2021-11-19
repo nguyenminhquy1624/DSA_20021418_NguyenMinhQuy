@@ -7,26 +7,45 @@ public class Deque<Item> implements Iterable<Item> {
 	private Node first;
 	private Node last;
 
+	/**
+	 * Tạo 1 class Node
+	 */
 	private class Node {
 		private Item item;
 		private Node next;
 		private Node prev;
 	}
 
+	/**
+	 * Khởi tạo các giá trị cho queue
+	 * first và last là null, số phần tử n = 0
+	 */
 	public Deque() {
 		n = 0;
 		first = null;
 		last = null;
 	}
 
+	/**
+	 * Kiểm tra xem queue có rỗng hay không
+	 * @return nếu queue rỗng trả về true nếu không trả về false
+	 */
 	public boolean isEmpty() {
 		return (n == 0);
 	}
 
+	/**
+	 * 
+	 * @return trả về kích thước của queue
+	 */
 	public int size() {
 		return n;
 	}
 
+	/**
+	 * Thêm vào đầu của queue
+	 * @param item : Dữ liệu thêm vào là item
+	 */
 	public void addFirst(Item item) {
 		if (item == null) {
 			throw new IllegalArgumentException();
@@ -47,6 +66,10 @@ public class Deque<Item> implements Iterable<Item> {
         n++;
 	}
 
+	/**
+	 * Thêm vào cuối của queue
+	 * @param item là dữ liệu được thêm vào
+	 */
 	public void addLast(Item item) {
 		if (item == null)   throw new IllegalArgumentException();
         if (isEmpty()) {
@@ -65,6 +88,10 @@ public class Deque<Item> implements Iterable<Item> {
         n++;
 	}
 
+	/**
+	 * Xóa phần tử đầu tiên của queue
+	 * @return trả về phần tử đã xóa đầu tiên của dãy 
+	 */
 	public Item removeFirst() {
 		if (isEmpty())  throw new NoSuchElementException();
         Item item = first.item;
@@ -78,6 +105,10 @@ public class Deque<Item> implements Iterable<Item> {
         return item;
 	}
 
+	/**
+	 * Xóa phần tử cuối cùng của queue
+	 * @return trả về phần tử đã xóa ở cuối cùng của queue
+	 */
 	public Item removeLast() {
 		if (isEmpty())  throw new NoSuchElementException();
         Item item = last.item;
